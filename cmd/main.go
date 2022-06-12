@@ -6,6 +6,8 @@ import (
 	"github.com/sonyamoonglade/golang-rest-postgres"
 	"github.com/sonyamoonglade/golang-rest-postgres/pkg/handler"
 	"github.com/sonyamoonglade/golang-rest-postgres/pkg/myRouter"
+	"github.com/sonyamoonglade/golang-rest-postgres/pkg/repository"
+	"github.com/sonyamoonglade/golang-rest-postgres/pkg/service"
 	"io"
 	"log"
 	"net/http"
@@ -15,8 +17,11 @@ func main() {
 
 	router := myRouter.NewRouter()
 
-	carController := new(handler.CarController)
-	carController.InitRoutes(router)
+	repositories := repository.NewRepository()
+	services := service.CreateService(repositories)
+	controller := handler.CreateController(services)
+
+	controller.InitRoutes(router)
 
 	server, err := todo.NewServer(router)
 
