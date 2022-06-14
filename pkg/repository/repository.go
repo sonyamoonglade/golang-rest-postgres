@@ -1,18 +1,24 @@
 package repository
 
+import (
+	"github.com/jmoiron/sqlx"
+	"github.com/sonyamoonglade/golang-rest-postgres/entities"
+)
+
 type Repository struct {
-	CarRepository
+	Car
+	User
 }
 
-type CarRepository interface {
+type Car interface {
 }
 
-func NewRepository() *Repository {
-	//
-	//DbConfig{
-	//	Dialect: "postgres",
-	//	DBName: ""
-	//}
+type User interface {
+	CreateUser(user entities.User) (int, error)
+}
 
-	return &Repository{}
+func NewRepository(db *sqlx.DB) *Repository {
+	return &Repository{
+		User: NewUserRepository(db),
+	}
 }

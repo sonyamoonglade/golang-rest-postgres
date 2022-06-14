@@ -3,19 +3,27 @@ package handler
 import (
 	"github.com/sonyamoonglade/golang-rest-postgres/pkg/myRouter"
 	"github.com/sonyamoonglade/golang-rest-postgres/pkg/service"
+	"net/http"
 )
 
 type Controller struct {
-	Services *service.Service
+	User
+	Router  *myRouter.Router
+	Service service.Service
 }
 
-func CreateController(services *service.Service) *Controller {
-	return &Controller{Services: services}
+func NewController(router *myRouter.Router, services *service.Service) *Controller {
+
+	userController := NewUserController(services.User)
+	userController.InitRoutes(router)
+
+	return &Controller{
+		Router: router,
+		User:   userController,
+	}
 }
 
-func (c *Controller) InitRoutes(r *myRouter.Router) {
-
-	r.POST("/createCar", c.createCar)
-	r.GET("/getCar", c.getCar)
-
+type User interface {
+	CreateUser(w http.ResponseWriter, r *http.Request)
+	InitRoutes(r *myRouter.Router)
 }

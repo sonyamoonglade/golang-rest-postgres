@@ -31,6 +31,7 @@ func (r *Router) POST(relativePath string, h http.HandlerFunc) {
 		Method:          http.MethodPost,
 	}
 	r.mux.HandleFunc(relativePath, h)
+	fmt.Printf("-- %s ( %s ) \n", relativePath, http.MethodPost)
 	return
 }
 func (r *Router) GET(relativePath string, h http.HandlerFunc) {
@@ -39,6 +40,7 @@ func (r *Router) GET(relativePath string, h http.HandlerFunc) {
 		Method:          http.MethodGet,
 	}
 	r.mux.HandleFunc(relativePath, h)
+	fmt.Printf("-- %s ( %s ) \n", relativePath, http.MethodPost)
 	return
 }
 

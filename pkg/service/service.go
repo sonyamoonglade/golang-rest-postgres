@@ -1,18 +1,27 @@
 package service
 
-import "github.com/sonyamoonglade/golang-rest-postgres/pkg/repository"
+import (
+	"github.com/sonyamoonglade/golang-rest-postgres/entities"
+	"github.com/sonyamoonglade/golang-rest-postgres/pkg/repository"
+)
 
 type Service struct {
 	Car
-	Repositories *repository.Repository
+	User
 }
 
 type Car interface {
-	createCar()
-	getCar()
+	CreateCar()
+	GetCar()
 }
 
-func CreateService(repository *repository.Repository) *Service {
-	s := Service{Repositories: repository}
+type User interface {
+	CreateUser(u entities.User) (int, error)
+}
+
+func CreateService(r *repository.Repository) *Service {
+	s := Service{
+		User: NewUserService(r.User),
+	}
 	return &s
 }
