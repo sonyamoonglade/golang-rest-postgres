@@ -1,9 +1,8 @@
-package todo
+package server
 
 import (
 	"errors"
 	"fmt"
-	"github.com/sonyamoonglade/golang-rest-postgres/pkg/handler"
 	"net/http"
 	"time"
 )
@@ -12,8 +11,8 @@ type Server struct {
 	httpServer *http.Server
 }
 
-func NewServer(c *handler.Controller) (*Server, error) {
-	if len(c.Router.Routes) == 0 {
+func NewServer(h *Handler) (*Server, error) {
+	if len(h.Router.Routes) == 0 {
 		return nil, errors.New("apply at least one route")
 	}
 
@@ -22,7 +21,7 @@ func NewServer(c *handler.Controller) (*Server, error) {
 		MaxHeaderBytes: 1 << 20,
 		ReadTimeout:    time.Second * 5,
 		WriteTimeout:   time.Second * 5,
-		Handler:        c.Router.Handler,
+		Handler:        h.Router.Handler,
 	}
 
 	return &s, nil

@@ -1,4 +1,4 @@
-package entities
+package entity
 
 type Garage struct {
 	GarageID uint8  `json:"-"`

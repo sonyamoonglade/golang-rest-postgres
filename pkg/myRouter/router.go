@@ -6,6 +6,11 @@ import (
 	"strings"
 )
 
+type Route struct {
+	HandlerFunction http.HandlerFunc
+	Method          string
+}
+
 type Router struct {
 	mux     *http.ServeMux
 	Handler http.Handler
@@ -20,12 +25,7 @@ func NewRouter() *Router {
 	return &r
 }
 
-type Route struct {
-	HandlerFunction http.HandlerFunc
-	Method          string
-}
-
-func (r *Router) POST(relativePath string, h http.HandlerFunc) {
+func (r *Router) Post(relativePath string, h http.HandlerFunc) {
 	r.Routes[relativePath] = Route{
 		HandlerFunction: h,
 		Method:          http.MethodPost,
@@ -34,13 +34,31 @@ func (r *Router) POST(relativePath string, h http.HandlerFunc) {
 	fmt.Printf("-- %s ( %s ) \n", relativePath, http.MethodPost)
 	return
 }
-func (r *Router) GET(relativePath string, h http.HandlerFunc) {
+func (r *Router) Put(relativePath string, h http.HandlerFunc) {
+	r.Routes[relativePath] = Route{
+		HandlerFunction: h,
+		Method:          http.MethodPut,
+	}
+	r.mux.HandleFunc(relativePath, h)
+	fmt.Printf("-- %s ( %s ) \n", relativePath, http.MethodPut)
+	return
+}
+func (r *Router) Get(relativePath string, h http.HandlerFunc) {
 	r.Routes[relativePath] = Route{
 		HandlerFunction: h,
 		Method:          http.MethodGet,
 	}
 	r.mux.HandleFunc(relativePath, h)
-	fmt.Printf("-- %s ( %s ) \n", relativePath, http.MethodPost)
+	fmt.Printf("-- %s ( %s ) \n", relativePath, http.MethodGet)
+	return
+}
+func (r *Router) Delete(relativePath string, h http.HandlerFunc) {
+	r.Routes[relativePath] = Route{
+		HandlerFunction: h,
+		Method:          http.MethodDelete,
+	}
+	r.mux.HandleFunc(relativePath, h)
+	fmt.Printf("-- %s ( %s ) \n", relativePath, http.MethodDelete)
 	return
 }
 

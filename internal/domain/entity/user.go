@@ -1,4 +1,4 @@
-package entities
+package entity
 
 type User struct {
 	UserID   uint8   `json:"-" db:"user_id"`
