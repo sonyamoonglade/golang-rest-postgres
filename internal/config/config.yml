@@ -1,8 +1,9 @@
 
-server_port: 5000
-driver: "postgres"
-host: "localhost"
-port: "5432"
-password: "admin"
-user: "postgres"
-database_name: "golang"
+app:
+  port: 5000
+db:
+  host: "localhost"
+  port: "5432"
+  iver: "postgres"
+  user: "postgres"
+  name: "golang"
