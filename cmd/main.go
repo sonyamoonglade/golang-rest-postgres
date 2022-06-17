@@ -15,6 +15,7 @@ import (
 func main() {
 
 	router := myRouter.NewRouter()
+
 	if err := config.InitConfig(); err != nil {
 		panic(fmt.Errorf("cfg fatal. %s", err.Error()))
 	}
@@ -42,7 +43,7 @@ func main() {
 		log.Fatalf("error occured creating new server with handlers - %v", handlers)
 	}
 
-	port := 5000
+	port := viper.GetInt("server_port")
 	if err := srv.StartListeningOn(port); err != nil {
 		log.Fatalf("error occured running server on port %d \n", port)
 	}

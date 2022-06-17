@@ -22,7 +22,13 @@ func NewCarService(storage storage.Car) *CarService {
 }
 
 func (s *CarService) CreateCar(dto dto.CreateCarDto) (uint8, error) {
-	return 0, nil
+
+	carId, err := s.storage.Create(dto)
+	if err != nil {
+		return 0, err
+	}
+
+	return carId, nil
 }
 func (s *CarService) UpdateCar(dto dto.UpdateCarDto) (*entity.Car, error) {
 	return nil, nil

@@ -1,18 +1,18 @@
 package dto
 
 type CreateCarDto struct {
-	GarageID uint8   `json:"garageID"`
-	UserID   uint8   `json:"userID"`
-	Model    string  `json:"model"`
-	Year     uint8   `json:"year"`
-	Price    float64 `json:"price"`
+	GarageID uint8   `util:"garageID"`
+	UserID   uint8   `util:"userID"`
+	Model    string  `util:"model"`
+	Year     uint8   `util:"year"`
+	Price    float64 `util:"price"`
 }
 
 type UpdateCarDto struct {
-	CarID    uint8   `json:"carID"`
-	GarageID uint8   `json:"garageID"`
-	UserID   uint8   `json:"userID"`
-	Model    string  `json:"model"`
-	Year     uint8   `json:"year"`
-	Price    float64 `json:"price"`
+	CarID    uint8   `util:"carID"`
+	GarageID uint8   `util:"garageID"`
+	UserID   uint8   `util:"userID"`
+	Model    string  `util:"model"`
+	Year     uint8   `util:"year"`
+	Price    float64 `util:"price"`
 }
