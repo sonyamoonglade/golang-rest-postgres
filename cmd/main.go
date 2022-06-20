@@ -17,7 +17,7 @@ import (
 )
 
 func main() {
-
+	// TODO: validation
 	logger := myLogger.NewLogger([]io.Writer{os.Stdout})
 	router := myRouter.NewRouter(logger)
 
@@ -41,7 +41,6 @@ func main() {
 	db, err := postgres.GetDbInstance(dbConfig)
 	if err != nil {
 		logger.PrintWithCrit(fmt.Sprintf("error occured while connecting to database. %s", err.Error()))
-		panic(fmt.Errorf("error occured while connecting to database. %s", err.Error()))
 	}
 	logger.PrintWithInf("db has connected successfully")
 
@@ -49,14 +48,12 @@ func main() {
 	services := service.NewServices(storages)
 	handlers := handler.NewHandlers(router, services, logger)
 	logger.PrintWithInf("initialized dependencies")
-	router.LogAllRoutes()
 
 	srv, err := server.NewServer(handlers)
 	logger.PrintWithInf("created new server")
 
 	if err != nil {
 		logger.PrintWithCrit(fmt.Sprintf("error occured creating new server with handlers - %v", handlers))
-		panic("server fatal")
 	}
 
 	port := viper.GetInt("app.port")

@@ -12,9 +12,10 @@ func NewServices(storages *storage.Storage) *Service {
 
 	carService := NewCarService(storages.Car)
 	userService := NewUserService(storages.User)
-
+	garageService := NewGarageService(storages.Garage)
 	return &Service{
-		Car:  carService,
-		User: userService,
+		Car:    carService,
+		User:   userService,
+		Garage: garageService,
 	}
 }

@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-type Route struct {
+type route struct {
 	HandlerFunction http.HandlerFunc
 	Method          string
 }
@@ -17,12 +17,13 @@ type Router struct {
 	logger  *myLogger.Logger
 	mux     *http.ServeMux
 	Handler http.Handler
-	Routes  map[string]Route
+	Routes  map[string]route
 }
 
 func (r *Router) LogAllRoutes() {
 	go func() {
 		time.Sleep(300 * time.Millisecond)
+
 		for path, route := range r.Routes {
 			r.logger.PrintWithRoute(fmt.Sprintf("-- %s ( %s )", path, route.Method))
 		}
@@ -33,13 +34,13 @@ func NewRouter(logger *myLogger.Logger) *Router {
 	r := Router{}
 	r.mux = http.NewServeMux()
 	r.Handler = newMiddleware(r.mux, &r)
-	r.Routes = map[string]Route{}
+	r.Routes = map[string]route{}
 	r.logger = logger
 	return &r
 }
 
 func (r *Router) Post(relativePath string, h http.HandlerFunc) {
-	r.Routes[relativePath] = Route{
+	r.Routes[relativePath] = route{
 		HandlerFunction: h,
 		Method:          http.MethodPost,
 	}
@@ -49,7 +50,7 @@ func (r *Router) Post(relativePath string, h http.HandlerFunc) {
 	return
 }
 func (r *Router) Put(relativePath string, h http.HandlerFunc) {
-	r.Routes[relativePath] = Route{
+	r.Routes[relativePath] = route{
 		HandlerFunction: h,
 		Method:          http.MethodPut,
 	}
@@ -59,7 +60,7 @@ func (r *Router) Put(relativePath string, h http.HandlerFunc) {
 	return
 }
 func (r *Router) Get(relativePath string, h http.HandlerFunc) {
-	r.Routes[relativePath] = Route{
+	r.Routes[relativePath] = route{
 		HandlerFunction: h,
 		Method:          http.MethodGet,
 	}
@@ -68,7 +69,7 @@ func (r *Router) Get(relativePath string, h http.HandlerFunc) {
 	return
 }
 func (r *Router) Delete(relativePath string, h http.HandlerFunc) {
-	r.Routes[relativePath] = Route{
+	r.Routes[relativePath] = route{
 		HandlerFunction: h,
 		Method:          http.MethodDelete,
 	}

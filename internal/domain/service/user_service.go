@@ -31,13 +31,13 @@ func (s *userService) Create(dto dto.CreateUserDto) (int64, error) {
 	return userId, nil
 
 }
-
 func (s *userService) GetById(id int64) (*entity.User, error) {
 
 	user, err := s.storage.GetById(id)
+
 	if user.UserID == 0 && err != nil {
 		msg := fmt.Sprintf("User with id %d does not exist", id)
-		return nil, app_errors.NewEmptyResultError(msg, err)
+		return nil, app_errors.NewApiError(msg, err)
 	}
 
 	return user, nil

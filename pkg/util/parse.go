@@ -5,9 +5,9 @@ import (
 	"io"
 )
 
-func ReadRequestBody(rc io.ReadCloser, output interface{}) error {
-	body, err := io.ReadAll(rc)
-	defer rc.Close()
+func ReadRequestBody(v io.ReadCloser, output interface{}) error {
+	body, err := io.ReadAll(v)
+	defer v.Close()
 	if err != nil {
 		return err
 	}

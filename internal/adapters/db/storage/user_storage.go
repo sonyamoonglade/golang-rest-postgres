@@ -26,10 +26,10 @@ func (st *userStorage) Create(dto dto.CreateUserDto) (int64, error) {
 
 	var id int64
 
-	sql := fmt.Sprint("INSERT INTO users (name,salary) values ($1,$2) returning user_id")
+	sql := fmt.Sprint("INSERT INTO users (name,worth) values ($1,$2) returning user_id")
 	st.logger.PrintWithInf(fmt.Sprintf("executing %s", sql))
-	row := st.db.QueryRow(sql, dto.Name, dto.Salary)
 
+	row := st.db.QueryRow(sql, dto.Name, dto.Worth)
 	if err := row.Scan(&id); err != nil {
 		return 0, err
 	}
@@ -37,7 +37,6 @@ func (st *userStorage) Create(dto dto.CreateUserDto) (int64, error) {
 	return id, nil
 
 }
-
 func (st *userStorage) GetById(id int64) (*entity.User, error) {
 
 	var user entity.User
@@ -47,7 +46,7 @@ func (st *userStorage) GetById(id int64) (*entity.User, error) {
 
 	row := st.db.QueryRow(sql, id)
 
-	if err := row.Scan(&user.UserID, &user.Name, &user.Salary); err != nil {
+	if err := row.Scan(&user.UserID, &user.Name, &user.Worth); err != nil {
 		return &user, err
 	}
 

@@ -2,7 +2,6 @@ package v1
 
 import (
 	"errors"
-	"fmt"
 	"github.com/sonyamoonglade/golang-rest-postgres/internal/app_errors"
 	"github.com/sonyamoonglade/golang-rest-postgres/internal/domain/service"
 	"github.com/sonyamoonglade/golang-rest-postgres/internal/handler/http/dto"
@@ -27,12 +26,10 @@ func NewUserHandler(service service.User, logger *myLogger.Logger) *userHandler 
 }
 
 func (h *userHandler) InitRoutes(r *myRouter.Router) {
-
-	r.Post("/user/register", h.Register)
-	r.Get("/user/", h.GetById)
+	r.Post("/user/register", h.register)
+	r.Get("/user/", h.getById)
 }
-
-func (h *userHandler) Register(w http.ResponseWriter, r *http.Request) {
+func (h *userHandler) register(w http.ResponseWriter, r *http.Request) {
 	var input dto.CreateUserDto
 
 	if err := util.ReadRequestBody(r.Body, &input); err != nil {
@@ -46,19 +43,19 @@ func (h *userHandler) Register(w http.ResponseWriter, r *http.Request) {
 	userId, err := h.service.Create(input)
 	if err != nil {
 		util.JsonResponse(w, http.StatusInternalServerError, map[string]interface{}{
-			"message": fmt.Sprintf("server error. %s", err.Error()),
+			"message": "server error",
 		})
 		h.logger.PrintWithErr(err.Error())
 		return
 	}
 
-	util.JsonResponse(w, http.StatusOK, map[string]interface{}{
+	util.JsonResponse(w, http.StatusCreated, map[string]interface{}{
 		"id": userId,
 	})
 	return
 
 }
-func (h *userHandler) GetById(w http.ResponseWriter, r *http.Request) {
+func (h *userHandler) getById(w http.ResponseWriter, r *http.Request) {
 
 	q := r.URL.Query()
 
@@ -80,7 +77,7 @@ func (h *userHandler) GetById(w http.ResponseWriter, r *http.Request) {
 
 	user, err := h.service.GetById(userId)
 	if err != nil {
-		var appErr *app_errors.EmptyResultError
+		var appErr *app_errors.ApiError
 		if errors.As(err, &appErr) {
 			util.JsonResponse(w, http.StatusNotFound, map[string]interface{}{
 				"message": appErr.Message,
