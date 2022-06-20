@@ -1,8 +1,7 @@
 package entity
 
 type User struct {
-	UserID   uint8   `util:"-" db:"user_id"`
-	GarageID uint8   `util:"garageId" db:"garage_id"`
-	Name     string  `util:"name" db:"name"`
-	Salary   float64 `util:"salary" db:"salary"`
+	UserID int64  `json:"-" db:"user_id"`
+	Name   string `json:"name" db:"name"`
+	Salary int64  `json:"salary" db:"salary"`
 }

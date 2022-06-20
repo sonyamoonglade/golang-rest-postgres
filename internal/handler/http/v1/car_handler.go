@@ -9,30 +9,31 @@ import (
 )
 
 type Car interface {
+	InitRoutes(r *myRouter.Router)
 }
 
-type CarHandler struct {
+type carHandler struct {
 	service service.Car
 }
 
-func NewCarHandler(service service.Car) *CarHandler {
-	h := &CarHandler{
+func NewCarHandler(service service.Car) *carHandler {
+	h := &carHandler{
 		service: service,
 	}
 	return h
 }
 
-func (h *CarHandler) InitRoutes(r *myRouter.Router) {
+func (h *carHandler) InitRoutes(r *myRouter.Router) {
 	r.Post("/car/create", h.CreateCar)
 	r.Put("/car/update", h.UpdateCar)
 	r.Delete("/car/delete", h.DeleteCar)
-	r.Get("/car", h.GetCar)
+	r.Get("/car/", h.GetCar)
 }
-func (h *CarHandler) CreateCar(w http.ResponseWriter, r *http.Request) {
+func (h *carHandler) CreateCar(w http.ResponseWriter, r *http.Request) {
 
 	var input dto.CreateCarDto
 
-	if err := util.ReadRequestBody(r, &input); err != nil {
+	if err := util.ReadRequestBody(r.Body, &input); err != nil {
 		util.JsonResponse(w, http.StatusInternalServerError, map[string]interface{}{
 			"message": "server error",
 		})
@@ -52,12 +53,15 @@ func (h *CarHandler) CreateCar(w http.ResponseWriter, r *http.Request) {
 	return
 
 }
-func (h *CarHandler) GetCar(w http.ResponseWriter, r *http.Request) {
+func (h *carHandler) GetCar(w http.ResponseWriter, r *http.Request) {
 
 }
-func (h *CarHandler) UpdateCar(w http.ResponseWriter, r *http.Request) {
+func (h *carHandler) UpdateCar(w http.ResponseWriter, r *http.Request) {
 
 }
-func (h *CarHandler) DeleteCar(w http.ResponseWriter, r *http.Request) {
+func (h *carHandler) DeleteCar(w http.ResponseWriter, r *http.Request) {
+
+}
+func (h *carHandler) BuyCar(w http.ResponseWriter, r *http.Request) {
 
 }

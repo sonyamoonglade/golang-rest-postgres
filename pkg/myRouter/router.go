@@ -2,8 +2,10 @@ package myRouter
 
 import (
 	"fmt"
+	"github.com/sonyamoonglade/golang-rest-postgres/pkg/myLogger"
 	"net/http"
 	"strings"
+	"time"
 )
 
 type Route struct {
@@ -12,16 +14,27 @@ type Route struct {
 }
 
 type Router struct {
+	logger  *myLogger.Logger
 	mux     *http.ServeMux
 	Handler http.Handler
 	Routes  map[string]Route
 }
 
-func NewRouter() *Router {
+func (r *Router) LogAllRoutes() {
+	go func() {
+		time.Sleep(300 * time.Millisecond)
+		for path, route := range r.Routes {
+			r.logger.PrintWithRoute(fmt.Sprintf("-- %s ( %s )", path, route.Method))
+		}
+	}()
+}
+
+func NewRouter(logger *myLogger.Logger) *Router {
 	r := Router{}
 	r.mux = http.NewServeMux()
-	r.Handler = NewMiddleware(r.mux, &r)
+	r.Handler = newMiddleware(r.mux, &r)
 	r.Routes = map[string]Route{}
+	r.logger = logger
 	return &r
 }
 
@@ -30,8 +43,9 @@ func (r *Router) Post(relativePath string, h http.HandlerFunc) {
 		HandlerFunction: h,
 		Method:          http.MethodPost,
 	}
+
 	r.mux.HandleFunc(relativePath, h)
-	fmt.Printf("-- %s ( %s ) \n", relativePath, http.MethodPost)
+
 	return
 }
 func (r *Router) Put(relativePath string, h http.HandlerFunc) {
@@ -39,8 +53,9 @@ func (r *Router) Put(relativePath string, h http.HandlerFunc) {
 		HandlerFunction: h,
 		Method:          http.MethodPut,
 	}
+
 	r.mux.HandleFunc(relativePath, h)
-	fmt.Printf("-- %s ( %s ) \n", relativePath, http.MethodPut)
+
 	return
 }
 func (r *Router) Get(relativePath string, h http.HandlerFunc) {
@@ -49,7 +64,7 @@ func (r *Router) Get(relativePath string, h http.HandlerFunc) {
 		Method:          http.MethodGet,
 	}
 	r.mux.HandleFunc(relativePath, h)
-	fmt.Printf("-- %s ( %s ) \n", relativePath, http.MethodGet)
+
 	return
 }
 func (r *Router) Delete(relativePath string, h http.HandlerFunc) {
@@ -58,21 +73,21 @@ func (r *Router) Delete(relativePath string, h http.HandlerFunc) {
 		Method:          http.MethodDelete,
 	}
 	r.mux.HandleFunc(relativePath, h)
-	fmt.Printf("-- %s ( %s ) \n", relativePath, http.MethodDelete)
+
 	return
 }
 
-type MethodCheckingMiddleware struct {
+type methodCheckingMiddleware struct {
 	Handler *http.ServeMux
 	Router  *Router
 }
 
-func NewMiddleware(handlerToWrap *http.ServeMux, Router *Router) *MethodCheckingMiddleware {
-	m := MethodCheckingMiddleware{Handler: handlerToWrap}
+func newMiddleware(handlerToWrap *http.ServeMux, Router *Router) *methodCheckingMiddleware {
+	m := methodCheckingMiddleware{Handler: handlerToWrap}
 	m.Router = Router
 	return &m
 }
-func (m *MethodCheckingMiddleware) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+func (m *methodCheckingMiddleware) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	requestPattern := req.URL.Path
 	requestMethod := req.Method
@@ -98,6 +113,7 @@ func (m *MethodCheckingMiddleware) ServeHTTP(w http.ResponseWriter, req *http.Re
 		w.Write([]byte(response))
 		return
 	}
+	w.Header().Set("Content-Type", "application/json")
 	m.Handler.ServeHTTP(w, req)
 	return
 }

@@ -3,12 +3,11 @@ package util
 import (
 	"encoding/json"
 	"io"
-	"net/http"
 )
 
-func ReadRequestBody(r *http.Request, output interface{}) error {
-
-	body, err := io.ReadAll(r.Body)
+func ReadRequestBody(rc io.ReadCloser, output interface{}) error {
+	body, err := io.ReadAll(rc)
+	defer rc.Close()
 	if err != nil {
 		return err
 	}

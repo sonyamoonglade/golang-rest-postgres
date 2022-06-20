@@ -13,15 +13,15 @@ type Car interface {
 	UpdateCar(dto dto.UpdateCarDto) (*entity.Car, error)
 }
 
-type CarService struct {
+type carService struct {
 	storage storage.Car
 }
 
-func NewCarService(storage storage.Car) *CarService {
-	return &CarService{storage: storage}
+func NewCarService(storage storage.Car) *carService {
+	return &carService{storage: storage}
 }
 
-func (s *CarService) CreateCar(dto dto.CreateCarDto) (uint8, error) {
+func (s *carService) CreateCar(dto dto.CreateCarDto) (uint8, error) {
 
 	carId, err := s.storage.Create(dto)
 	if err != nil {
@@ -30,12 +30,12 @@ func (s *CarService) CreateCar(dto dto.CreateCarDto) (uint8, error) {
 
 	return carId, nil
 }
-func (s *CarService) UpdateCar(dto dto.UpdateCarDto) (*entity.Car, error) {
+func (s *carService) UpdateCar(dto dto.UpdateCarDto) (*entity.Car, error) {
 	return nil, nil
 }
-func (s *CarService) DeleteCar(id uint8) (uint8, error) {
+func (s *carService) DeleteCar(id uint8) (uint8, error) {
 	return 0, nil
 }
-func (s *CarService) GetCar(id uint8) (*entity.Car, error) {
+func (s *carService) GetCar(id uint8) (*entity.Car, error) {
 	return nil, nil
 }

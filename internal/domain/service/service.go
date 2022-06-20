@@ -11,8 +11,10 @@ type Service struct {
 func NewServices(storages *storage.Storage) *Service {
 
 	carService := NewCarService(storages.Car)
+	userService := NewUserService(storages.User)
 
 	return &Service{
-		Car: carService,
+		Car:  carService,
+		User: userService,
 	}
 }

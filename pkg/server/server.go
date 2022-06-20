@@ -3,6 +3,7 @@ package server
 import (
 	"errors"
 	"fmt"
+	http2 "github.com/sonyamoonglade/golang-rest-postgres/internal/handler/http"
 	"net/http"
 	"time"
 )
@@ -11,7 +12,7 @@ type Server struct {
 	httpServer *http.Server
 }
 
-func NewServer(h *Handler) (*Server, error) {
+func NewServer(h *http2.Handler) (*Server, error) {
 	if len(h.Router.Routes) == 0 {
 		return nil, errors.New("apply at least one route")
 	}
@@ -28,8 +29,6 @@ func NewServer(h *Handler) (*Server, error) {
 }
 
 func (s *Server) StartListeningOn(port int) error {
-
 	s.httpServer.Addr = fmt.Sprintf(":%d", port)
-	fmt.Printf("server has successfully runnning on port %d \n", port)
 	return s.httpServer.ListenAndServe()
 }

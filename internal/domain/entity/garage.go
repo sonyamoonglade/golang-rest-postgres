@@ -1,7 +1,8 @@
 package entity
 
 type Garage struct {
-	GarageID uint8  `util:"-"`
-	Name     string `util:"name"`
-	Capacity uint8  `util:"capacity"`
+	GarageID int64  `json:"-" db:"garage_id"`
+	UserID   int64  `json:"userId" db:"user_id"`
+	Name     string `json:"name" db:"name"`
+	Capacity int64  `json:"capacity" db:"capacity"`
 }
