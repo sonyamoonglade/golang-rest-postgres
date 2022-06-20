@@ -3,6 +3,7 @@ package myLogger
 import (
 	"fmt"
 	"io"
+	"os"
 	"sync"
 )
 
@@ -57,6 +58,7 @@ func (l *Logger) PrintWithCrit(v string) {
 	for _, w := range l.outs {
 		l.write(Route, v, w)
 	}
+	os.Exit(1)
 }
 
 func (l *Logger) PrintWithRoute(v string) {

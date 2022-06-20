@@ -23,11 +23,9 @@ func main() {
 
 	if err := config.InitConfig(); err != nil {
 		logger.PrintWithCrit(fmt.Sprintf("error when reading config. %s", err.Error()))
-		panic(fmt.Errorf("cfg fatal. %s", err.Error()))
 	}
 	if err := godotenv.Load(); err != nil {
 		logger.PrintWithCrit(fmt.Sprintf("error occured loading env variables. %s", err.Error()))
-		panic(fmt.Errorf("env fatal. %s", err.Error()))
 	}
 	logger.PrintWithInf("initialized config successfully")
 
